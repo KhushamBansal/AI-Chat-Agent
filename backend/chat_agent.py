@@ -19,6 +19,7 @@ import google.generativeai as genai
 from mem0 import Memory
 import pinecone
 from pinecone import Pinecone, ServerlessSpec
+from sentence_transformers import SentenceTransformer
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -40,6 +41,8 @@ class PineconeRAGMemoryManager:
             # Fallback to direct Pinecone integration
             self._init_direct_pinecone()
 
+        self.embedding_model = SentenceTransformer("all-MiniLM-L6-v2")  # or your model name
+
     def _init_mem0_pinecone(self):
         """Initialize mem0 with Pinecone backend"""
         config = {
@@ -51,8 +54,8 @@ class PineconeRAGMemoryManager:
                 "provider": "pinecone",
                 "config": {
                     "api_key": os.environ["PINECONE_API_KEY"],
-                    "index_name": "chat-memories",
-                    "environment": "us-east-1-aws",  # Pinecone free tier region
+                    "collection_name": "chat-memories",  # ✅ Use collection_name
+                    "environment": "us-east-1-aws",
                     "embedding_model_dims": 384,
                 },
             },
