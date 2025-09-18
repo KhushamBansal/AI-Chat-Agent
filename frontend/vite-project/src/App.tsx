@@ -76,7 +76,7 @@ function App() {
               username: messageData.username,
               message: messageData.message,
               timestamp: messageData.timestamp || new Date().toISOString(),
-              isBot: messageData.username === 'AI Agent'
+              isBot: messageData.username.includes('AI')
             }]);
           } catch (e) {
             console.error('Error parsing message:', e);
@@ -254,17 +254,17 @@ function App() {
       </div>
 
       {/* Chat Container */}
-      <div className="flex flex-col h-[calc(100vh-80px)]">
+      <div className="flex flex-col h-screen" style={{ height: 'calc(100vh - 80px)' }}>
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto p-6">
+        <div className="flex-1 overflow-y-auto p-6 scrollbar-thin">
           <div className="max-w-4xl mx-auto space-y-4">
             {messages.map((msg) => (
               <div
                 key={msg.id}
-                className={`flex ${msg.isOwn ? 'justify-end' : 'justify-start'}`}
+                className={`flex chat-message ${msg.isOwn ? 'justify-end' : 'justify-start'}`}
               >
                 <div
-                  className={`max-w-md px-4 py-3 rounded-2xl ${
+                  className={`max-w-md px-4 py-3 rounded-2xl shadow-sm ${
                     msg.isSystem
                       ? 'bg-yellow-100 border border-yellow-200 text-yellow-800'
                       : msg.isBot
